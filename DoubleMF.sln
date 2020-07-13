@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF", "DoubleMF\DoubleMF.csproj", "{B962F650-9476-46C8-BF44-C38B342E7DA6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Data", "DoubleMF.Data\DoubleMF.Data.csproj", "{1E3053D2-EF6A-4345-890C-12E6462CCB41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Download", "DoubleMF.Download\DoubleMF.Download.csproj", "{92ED5185-8AFA-45F7-812D-B768624562A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Model", "DoubleMF.Model\DoubleMF.Model.csproj", "{60CD3988-A539-46DA-8F02-2F8C62549C49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMFTest", "DoubleMFTest\DoubleMFTest.csproj", "{DBCC9F9F-47EB-4F0E-8703-43F6E352FEAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleMF.Helper", "DoubleMF.Helper\DoubleMF.Helper.csproj", "{F39A947F-F6F4-4140-92F5-F026747CF414}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B962F650-9476-46C8-BF44-C38B342E7DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B962F650-9476-46C8-BF44-C38B342E7DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B962F650-9476-46C8-BF44-C38B342E7DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B962F650-9476-46C8-BF44-C38B342E7DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E3053D2-EF6A-4345-890C-12E6462CCB41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E3053D2-EF6A-4345-890C-12E6462CCB41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E3053D2-EF6A-4345-890C-12E6462CCB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E3053D2-EF6A-4345-890C-12E6462CCB41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92ED5185-8AFA-45F7-812D-B768624562A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92ED5185-8AFA-45F7-812D-B768624562A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92ED5185-8AFA-45F7-812D-B768624562A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92ED5185-8AFA-45F7-812D-B768624562A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60CD3988-A539-46DA-8F02-2F8C62549C49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60CD3988-A539-46DA-8F02-2F8C62549C49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60CD3988-A539-46DA-8F02-2F8C62549C49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60CD3988-A539-46DA-8F02-2F8C62549C49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBCC9F9F-47EB-4F0E-8703-43F6E352FEAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBCC9F9F-47EB-4F0E-8703-43F6E352FEAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBCC9F9F-47EB-4F0E-8703-43F6E352FEAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBCC9F9F-47EB-4F0E-8703-43F6E352FEAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F39A947F-F6F4-4140-92F5-F026747CF414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F39A947F-F6F4-4140-92F5-F026747CF414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F39A947F-F6F4-4140-92F5-F026747CF414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F39A947F-F6F4-4140-92F5-F026747CF414}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9724887-DD82-4897-9E52-0C3DDF863F76}
+	EndGlobalSection
+EndGlobal
