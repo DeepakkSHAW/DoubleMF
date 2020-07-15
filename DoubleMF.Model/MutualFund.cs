@@ -19,6 +19,7 @@ namespace DoubleMF.Model
         [Required]
         public int MutualFundCode { get; set; }
 
+        public bool DowbloadEnabled { get; set; }
         public AssetManagtComp AMC { get; set; }
 
         public IEnumerable<NetAssetValue> NetAssetValues { get; set; }

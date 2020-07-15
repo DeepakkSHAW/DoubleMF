@@ -36,14 +36,6 @@ namespace DoubleMF.Data.Migrations
                     b.HasKey("AMCId");
 
                     b.ToTable("T_AssetManagtCO");
-
-                    b.HasData(
-                        new
-                        {
-                            AMCId = 1,
-                            AMCName = "OM Test AMC",
-                            InDate = new DateTime(2020, 7, 13, 0, 0, 0, 0, DateTimeKind.Local)
-                        });
                 });
 
             modelBuilder.Entity("DoubleMF.Model.MutualFund", b =>
@@ -53,6 +45,9 @@ namespace DoubleMF.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("AMCId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("DowbloadEnabled")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("InDate")

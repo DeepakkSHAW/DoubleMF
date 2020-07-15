@@ -59,9 +59,9 @@ namespace DoubleMF.Data
                 .WithOne(a => a.MF);
 
             /*Insert a Dummy record on table creation (optional)*/
-            modelBuilder.Entity<AssetManagtComp>().HasData(
-                new AssetManagtComp() { AMCId = 1, AMCName = "OM Test AMC" }
-                );
+            //modelBuilder.Entity<AssetManagtComp>().HasData(
+            //    new AssetManagtComp() { AMCId = 1, AMCName = "OM Test AMC" }
+            //    );
 
         }
     }

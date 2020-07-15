@@ -24,7 +24,7 @@ namespace DoubleMF.Download
            
             var amrUriBuilder = new UriBuilder(_amfURL);
             var query = HttpUtility.ParseQueryString(amrUriBuilder.Query);
-            query["frmdt"] = dt.AddDays(-1).ToString("dd-MMM-yyyy"); //"06-Apr-2020";
+            query["frmdt"] = dt.AddDays(0).ToString("dd-MMM-yyyy"); //"06-Apr-2020";
 
             amrUriBuilder.Query = query.ToString();
             var amfUri = amrUriBuilder.ToString();
@@ -55,7 +55,7 @@ namespace DoubleMF.Download
 
         public async Task<List<AMFDataModel>> GetDownloadedDataAsync()
         {
-             _responseBody = File.ReadAllText(@"c:\Temp\MF.txt");
+            // _responseBody = File.ReadAllText(@"c:\Temp\MF.txt");
             var records = new List<AMFDataModel>();
 
             if (string.IsNullOrEmpty(_responseBody)) return records;
@@ -80,8 +80,16 @@ namespace DoubleMF.Download
                     //{
                     //    Debug.WriteLine($"{item.SchemeCode} ### {item.SchemeName} ### {item.Date}");
                     //}
-                    return records;
+                    //return records;
                 }
+
+                ///*Write to new CSV File*/
+                //using (var writer = new StreamWriter(@"c:\Temp\MFFinal.csv"))
+                //using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                //{
+                //    csv.WriteRecords(records);
+                //}
+                return records;
             }
             catch (Exception ex)
             {

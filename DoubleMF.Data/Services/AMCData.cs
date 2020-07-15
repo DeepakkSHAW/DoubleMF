@@ -49,21 +49,25 @@ namespace DoubleMF.Data.Services
             bool vReturn = false;
 
             var amc_data = new List<AssetManagtComp>();
+            
             try
             {
+                var existing_amc = await _ctx.assetManagtComps.ToListAsync();
+
                 if (downloaded_data == null) return vReturn;
                 var addAMCs = new List<AssetManagtComp>();
 
                 foreach (var data in downloaded_data.Where(e => (e.Date == null) && (!e.SchemeCode.Contains('('))).GroupBy(g => g.SchemeCode)) //Filter, may required to change in future
                 {
                     //Debug.WriteLine(data.Key);
-                    if (_ctx.assetManagtComps.Where(e => e.AMCName == data.Key).Count() <= 0)
+                    if (existing_amc.Where(e => e.AMCName == data.Key).Count() == 0)
                     {    
                         addAMCs.Add(new AssetManagtComp { AMCName = data.Key });
                     }
                     _ctx.assetManagtComps.AddRange(addAMCs);
                 }
                 var dbActionCount = await _ctx.SaveChangesAsync();
+
                 Debug.WriteLine($"AMC DB Action count {dbActionCount}");
                 vReturn = true;
             }

@@ -20,51 +20,43 @@ namespace DoubleMF.Data.Services
         public async Task<bool> SaveDownloadedData(List<AMFDataModel> downloaded_data)
         {
             bool vReturn = false;
-            string amc_name = string.Empty, mf_name = string.Empty, previous_amc = string.Empty;
             var mutual_funds = new List<MutualFund>();
 
             try
             {
+                var existing_amc = await _ctx.assetManagtComps.ToListAsync();
+                var existing_mf = await _ctx.mutualFunds.ToListAsync();
+
+                var found_amc = new AssetManagtComp();
+
                 if (downloaded_data == null) return vReturn;
 
-                foreach (var data in downloaded_data)
+                foreach (var data in downloaded_data.Where(e => !e.SchemeCode.Contains('(')))
                 {
-                    mf_name = data.SchemeName;
-
                     if (data.Date == null)
                     {
-                        amc_name = data.SchemeCode;
-                        if (previous_amc != amc_name)
-                        {
-                            var amc = await _ctx.assetManagtComps.Where(e => e.AMCName == previous_amc).FirstOrDefaultAsync();
-                            if (amc != null)
-                            {
-                                //* Found AMC *//
-                                amc.MutualFunds = mutual_funds;
-                                _ctx.Update(amc);
-                                mutual_funds = new List<MutualFund>();
-                            }
-                            else
-                            {
-                                /* AMC need to added by separate function */
-                            }
-                            previous_amc = amc_name;
-                        }
+                        found_amc = existing_amc.Where(e => e.AMCName == data.SchemeCode).FirstOrDefault();
                     }
                     else
                     {
-                        if(_ctx.mutualFunds.Where(e => e.MutualFundName == mf_name).Count() == 0) //Add the MF if not found in db
-                            mutual_funds.Add(new MutualFund { MutualFundName = mf_name, MutualFundCode = data.SchemeCode.ToNumeric() });
+                        if (data.SchemeCode.IsNumeric())
+                        {
+                            var mf_SchemeCode = data.SchemeCode.ToNumeric();
+                            if (!existing_mf.Exists(e => e.MutualFundCode == mf_SchemeCode))
+                            {
+                                mutual_funds.Add(new MutualFund { AMC = found_amc, MutualFundName = data.SchemeName, MutualFundCode = mf_SchemeCode, DowbloadEnabled = false });
+                            }
+                        }
                     }
-
                 }
+                _ctx.mutualFunds.AddRange(mutual_funds);
                 var dbActionCount = await _ctx.SaveChangesAsync();
                 Debug.WriteLine($"MF DB Action count {dbActionCount}");
                 vReturn = true;
             }
             catch (Exception ex)
             {
-               Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 throw;
             }
 

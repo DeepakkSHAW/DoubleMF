@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using DoubleMF.Helper;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace DoubleMF.Data.Services
 {
@@ -20,29 +21,34 @@ namespace DoubleMF.Data.Services
         public async Task<bool> SaveDownloadeNAVdData(List<AMFDataModel> downbloaded_data)
         {
             bool vReturn = false;
-
+            var nav_data = new List<NetAssetValue>();
             try
             {
+                var theDates = downbloaded_data.GroupBy(g => g.Date);
+                var theDate = theDates.Select(e => e.Key);
+                
+                var existing_nav = await _ctx.netAssetValues.Where(s => s.OnDate == theDate.ToArray()[1]) .ToListAsync();
+                var existing_mf = await _ctx.mutualFunds.ToListAsync();
+
                 foreach (var data in downbloaded_data.Where(e => (e.Date != null)))
                 {
-                    var mf_code = data.SchemeCode;
-                    var nav_date = data.Date;
-                    if (mf_code.IsNumeric())
+                    if (data.Date != null)
                     {
-                        var mf = await _ctx.mutualFunds.Where(e => e.MutualFundCode == data.SchemeCode.ToNumeric()).SingleOrDefaultAsync();
-                        if (mf != null)
+                        if (data.SchemeCode.IsNumeric())
                         {
-                            if (_ctx.netAssetValues.Where(e => (e.OnDate == data.Date) && (e.MF == mf)).Count() == 0)
+                            var mf_SchemeCode = data.SchemeCode.ToNumeric();
+                            if (!existing_nav.Exists(e => (e.OnDate == data.Date) && (e.MF.MutualFundCode == mf_SchemeCode)))
                             {
-                                var new_nav = new List<NetAssetValue>();
-                                new_nav.Add(new NetAssetValue { Price = (double)data.NetAssetValue, OnDate = (DateTime)data.Date });
-
-                                mf.NetAssetValues = new_nav;
-                                _ctx.Update(mf);
+                                var mf = existing_mf.Where(e => (e.MutualFundCode == mf_SchemeCode) && (e.DowbloadEnabled == false)).FirstOrDefault();
+                                if (mf != null)
+                                {
+                                    nav_data.Add(new NetAssetValue { MF = mf, Price = (double)data.NetAssetValue, OnDate = (DateTime)data.Date });
+                                }
                             }
                         }
                     }
                 }
+                _ctx.netAssetValues.AddRange(nav_data);
                 var dbActionCount = await _ctx.SaveChangesAsync();
                 Debug.WriteLine($"NAV DB Action count {dbActionCount}");
                 vReturn = true;
