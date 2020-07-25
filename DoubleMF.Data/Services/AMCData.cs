@@ -16,6 +16,7 @@ namespace DoubleMF.Data.Services
         public AMCData(DoubleMFDBContext context)
         {
             _ctx = context;
+            //used IOption as weel to pass the configuration connection string
         }
         public async Task<IEnumerable<AssetManagtComp>> GetAMCsAsync()
         {

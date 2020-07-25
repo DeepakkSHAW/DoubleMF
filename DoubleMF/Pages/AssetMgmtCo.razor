@@ -1,0 +1,30 @@
+﻿@using DoubleMF.Data.Services
+
+@page "/amc"
+
+@inject Data.Services.ISayHello srvGreeting
+@*@inject DoubleMF.Data.Services.IAMCData srvAMC*@
+
+<h3>Assent Management Companies</h3>
+<p> @greetingString</p>
+@*@foreach (var item in _amcs)
+    {
+        <p>@item.AMCName</p>
+    }*@
+
+@code {
+
+    private IReadOnlyList<Model.AssetManagtComp> _amcs;
+
+    string greetingString = "Start with Jag-Div";
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        greetingString = srvGreeting.Hello("Divyam");
+         _amcs = new List<Model.AssetManagtComp>();
+       //  _amcs= (await srvAMC.GetAMCsAsync()).ToList();
+
+       // System.Diagnostics.Debug.WriteLine($"Found Total AMC's {_amcs.Count()}");
+    }
+}

@@ -55,7 +55,7 @@ namespace DoubleMF.Download
 
         public async Task<List<AMFDataModel>> GetDownloadedDataAsync()
         {
-            // _responseBody = File.ReadAllText(@"c:\Temp\MF.txt");
+             //_responseBody = File.ReadAllText(@"..\..\..\..\Data\MF Analysis\MF.txt");
             var records = new List<AMFDataModel>();
 
             if (string.IsNullOrEmpty(_responseBody)) return records;

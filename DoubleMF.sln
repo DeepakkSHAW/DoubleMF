@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Model", "DoubleMF.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMFTest", "DoubleMFTest\DoubleMFTest.csproj", "{DBCC9F9F-47EB-4F0E-8703-43F6E352FEAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleMF.Helper", "DoubleMF.Helper\DoubleMF.Helper.csproj", "{F39A947F-F6F4-4140-92F5-F026747CF414}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Helper", "DoubleMF.Helper\DoubleMF.Helper.csproj", "{F39A947F-F6F4-4140-92F5-F026747CF414}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Server", "DoubleMF.Server\DoubleMF.Server.csproj", "{0278B23A-10C7-4DAA-A7D7-EDB8FBB0BFB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleMF.AzFn", "DoubleMF.AzFn\DoubleMF.AzFn.csproj", "{FEE1048B-B66E-427D-8E06-2E66A69BC35F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{F39A947F-F6F4-4140-92F5-F026747CF414}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F39A947F-F6F4-4140-92F5-F026747CF414}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F39A947F-F6F4-4140-92F5-F026747CF414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0278B23A-10C7-4DAA-A7D7-EDB8FBB0BFB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0278B23A-10C7-4DAA-A7D7-EDB8FBB0BFB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0278B23A-10C7-4DAA-A7D7-EDB8FBB0BFB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0278B23A-10C7-4DAA-A7D7-EDB8FBB0BFB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEE1048B-B66E-427D-8E06-2E66A69BC35F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEE1048B-B66E-427D-8E06-2E66A69BC35F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEE1048B-B66E-427D-8E06-2E66A69BC35F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEE1048B-B66E-427D-8E06-2E66A69BC35F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

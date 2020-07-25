@@ -114,7 +114,7 @@ namespace DoubleMFTest
                 var mfQuary = provider.GetService<DoubleMF.Data.Services.IMFData>();
                 var navQuary = provider.GetService<DoubleMF.Data.Services.INAVData>();
 
-                DateTime StartDate = new DateTime(2020, 4, 10);
+                DateTime StartDate = new DateTime(2020, 7, 15);
                 DateTime EndDate = tillDate; // DateTime.Today.AddDays(-1);
                 int DayInterval = 1;
                 while (StartDate <= EndDate)

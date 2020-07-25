@@ -22,13 +22,25 @@ namespace DoubleMF.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            try
             {
-                /*This hard coded connection only required for EFCore migration purpose (need not be required at run time)*/
-                var dbConnection = @"Data Source=..//Data//DB//DoubleMF.db";
-                optionsBuilder.UseSqlite(dbConnection, options => options.MaxBatchSize(512));
-                optionsBuilder.EnableSensitiveDataLogging();
+                if (!optionsBuilder.IsConfigured)
+                {
+                    /*This hard coded connection only required for EFCore migration purpose (need not be required at run time)*/
+                    //var dbConnection = @"Data Source=..//Data//DB//DoubleMF.db;Version=3; Password=myLitePW";
+                    var dbConnection = @"Data Source=..\\..\\..\\..\\Data\\DB\\DoubleMF.db";
+                    //var dbConnection = @"Data Source=DoubleMF.db";
+                    //optionsBuilder.UseSqlite(dbConnection);
+                     optionsBuilder.UseSqlite(dbConnection, options => options.MaxBatchSize(512));
+                     optionsBuilder.EnableSensitiveDataLogging();
+                }
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                throw;
+            }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
