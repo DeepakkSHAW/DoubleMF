@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Helper", "DoubleMF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.Server", "DoubleMF.Server\DoubleMF.Server.csproj", "{0278B23A-10C7-4DAA-A7D7-EDB8FBB0BFB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleMF.AzFn", "DoubleMF.AzFn\DoubleMF.AzFn.csproj", "{FEE1048B-B66E-427D-8E06-2E66A69BC35F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoubleMF.AzFn", "DoubleMF.AzFn\DoubleMF.AzFn.csproj", "{FEE1048B-B66E-427D-8E06-2E66A69BC35F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

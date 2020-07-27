@@ -7,11 +7,14 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using DoubleMF.Helper;
 using System.Collections.Generic;
 using System.Linq;
 using DoubleMF.Data;
 using Microsoft.Extensions.DependencyInjection;
 using DoubleMF.Data.Services;
+using System.Web.Mvc;
+using ContentResult = Microsoft.AspNetCore.Mvc.ContentResult;
 
 namespace DoubleMF.AzFn
 {
@@ -34,12 +37,15 @@ namespace DoubleMF.AzFn
         }
         //DK: Note copy the dll 'e_sqlite3.dll' to folder 'D:\home\site\tools' after deployment
         //Also, it might needed to copy this dll to bin folder 'bin\Debug\netcoreapp3.1\bin\' during development and testing
-        [FunctionName("UpdateMF")]
-        public async Task<IActionResult> HttpFnUpdateMF(
+        //Another alternative change the Function .netcre framework to 2.2 you don't need any dll to copy
+
+        //[Disable]
+        [FunctionName("UpdateMFOnDate")]
+        public async Task<IActionResult> HttpFnUpdateMFOnDate(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("Update Mutual Funds NAV Sync kickoff via http request");
+            log.LogInformation("Update Mutual Funds onDate NAV Sync kickoff via http request");
 
             string onDate = req.Query["OnDate"];
 
@@ -103,6 +109,68 @@ namespace DoubleMF.AzFn
             {
                 //return new StatusCodeResult(500);
                 //return new OkObjectResult("Bad Input");
+                return new ContentResult() { Content = "Invalid Date", StatusCode = StatusCodes.Status400BadRequest };
+            }
+        }
+
+        //[Disable]
+        [FunctionName("UpdateMFOnMonth")]
+        public async Task<IActionResult> HttpFnUpdateMFOnMohth(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("Update Mutual Funds onMonth NAV Sync kickoff via http request");
+
+            string onMonth = req.Query["OnMonth"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            onMonth = onMonth ?? data?.onMonth;
+            if (string.IsNullOrEmpty(onMonth)) { return new ContentResult() { Content = "No Content", StatusCode = StatusCodes.Status204NoContent }; }
+
+            DateTime theMonth;
+            if (DateTime.TryParse(onMonth, out theMonth))
+            {
+                try
+                {
+                    if (theMonth.Year > DateTime.Today.Year)
+                    {
+                        return new ContentResult() { Content = "Sync on future YEAR is not possible", StatusCode = StatusCodes.Status400BadRequest };
+                    }
+                    else if(theMonth.Year == DateTime.Today.Year)
+                    { 
+                        if(theMonth.Month >= DateTime.Today.Month)
+                        {
+                            return new ContentResult() { Content = "Sync on future MONTH is not possible", StatusCode = StatusCodes.Status400BadRequest };
+                        }
+                    }
+
+                    var dateRange = theMonth.GetDatesExceptWeekends(theMonth.Day);
+                    foreach (var theDate in dateRange)
+                    {
+                        //log.LogWarning(theDate.ToString("dd-MMM-yy dddd"));
+                        if (await SharedFunction.MFCoreProcess(theDate, log, _aMFiindia, _amcQuary, _mfQuary, _navQuary))
+                        {
+                            //return new OkObjectResult($"Mutual Funds Synchronization on Data {theDate.ToString("dd-MMM-yy ddd")} has completed successfully.");
+                            log.LogWarning($"Mutual Funds Synchronization on Data {theDate.ToString("dd-MMM-yy ddd")} has completed successfully.");
+                        }
+                        else
+                        {
+                            //return new ContentResult() { Content = $"Unable to download Mutual Fund data from AMFIndia on Dated:{theDate}", StatusCode = StatusCodes.Status500InternalServerError };
+                            log.LogError($"Unable to download Mutual Fund data from AMFIndia on Dated:{theDate}");
+                        }
+                    }
+
+                    return new OkObjectResult($"Mutual Funds Synchronization on Data {theMonth.ToString("MMMM-yyyy")} has completed successfully.");
+                }
+                catch (Exception ex)
+                {
+                    log.LogError($"Error occurred while Syncing Mutual Funds.\nError: {ex.Message}");
+                    throw;
+                }
+            }
+            else
+            {
                 return new ContentResult() { Content = "Invalid Date", StatusCode = StatusCodes.Status400BadRequest };
             }
         }

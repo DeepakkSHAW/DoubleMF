@@ -32,7 +32,8 @@ namespace DoubleMF.AzFn
             //Debug.WriteLine(Configuration.GetConnectionString("DoubleMFSqliteDB"));
             var dbConnectionString = "DoubleMFSqliteDB";
             string conStr = System.Environment.GetEnvironmentVariable(dbConnectionString, EnvironmentVariableTarget.Process);
-            builder.Services.AddDbContext<DoubleMFDBContext>(options => options.UseSqlite(conStr, options => options.MaxBatchSize(512)));
+            //builder.Services.AddDbContext<DoubleMFDBContext>(options => options.UseSqlite(conStr, options => options.MaxBatchSize(512)));
+            builder.Services.AddDbContext<DoubleMFDBContext>(_ => _.UseSqlite(conStr));
             builder.Services.AddDbContext<DoubleMFDBContext>(options => options.EnableSensitiveDataLogging());
             /*Adding AMC implementation to Dependency Injection to access DB Interfaces*/
             builder.Services.AddTransient<Data.Services.IAMCData, Data.Services.AMCData>();
