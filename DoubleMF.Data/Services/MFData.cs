@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace DoubleMF.Data.Services
 {
@@ -17,6 +19,175 @@ namespace DoubleMF.Data.Services
         {
             _ctx = context;
         }
+        public async Task<List<MFSchemeDTO>> GetMFSchemeAsync()
+        {
+            var vReturn = new List<MFSchemeDTO>();
+            try
+            {
+                var quary = await _ctx.assetManagtComps.Include(i => i.MutualFunds).OrderBy(o => o.AMCName).ToListAsync();
+                Debug.WriteLine($"AMC Count: [{quary.Count()}] Mutual Fund count: [{quary.Where(i => i.AMCId == 5).SelectMany(e => e.MutualFunds).Count()}]");
+
+                //var v = quary.Select(p => new MFSchemeDTO
+                //{
+                //    AMCName = p.AMCName,
+                //    MFDetailDTOs = p.MutualFunds.Select(e => new MFDetailDTO 
+                //        { MutualFundName = e.MutualFundName, MutualFundCode = e.MutualFundCode }).ToList()
+                //}).ToList();
+
+                //var r = quary.Select(s => new List<MFSchemeDTO>().Select(p => new MFSchemeDTO
+                //{
+                //    AMCName = p.AMCName,
+                //    MFDetailDTOs = p.MFDetailDTOs.Select(e => new MFDetailDTO
+                //    { MutualFundName = e.MutualFundName, MutualFundCode = e.MutualFundCode }).ToList()
+                //}).ToList()
+                //).ToList();
+
+                foreach (var item in quary)
+                {
+                    vReturn.Add(new MFSchemeDTO()
+                    {
+                        AMCName = item.AMCName,
+                        MFDetailDTOs = item.MutualFunds.Select(i => new MFDetailDTO
+                        {
+                            MutualFundName = i.MutualFundName,
+                            MutualFundCode = i.MutualFundCode
+                        }
+                        ).ToList()
+                    });
+                }
+                ///////ERROR/////
+                //var vReturn1 = quary.Select(e => new MFSchemeDTO
+                //{
+                //    AMCName = e.AMCName,
+                //    MFDetailDTOs = (List<MFDetailDTO>)e.MutualFunds.Select(i => new MFDetailDTO()
+                //    {
+                //        MutualFundName = i.MutualFundName,
+                //        MutualFundCode = i.MutualFundCode
+                //    })
+                //});
+                /////////////
+
+                return vReturn;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw;
+            }
+
+
+        }
+        public async Task<DoubleMFResponse> GetMFSchemeDetailsAsync(int PageIndex = 0, int PageSize = 10, string StartsWith = "", bool IsAMCIncluded = false)
+        {
+            var vReturn = new DoubleMFResponse() { Success = false, Result = new Result() { ActualCount = -1, Data = new List<object>() } };
+            //query
+            var query = _ctx.mutualFunds.Where(p => p.MutualFundName.StartsWith(StartsWith));
+            try
+            {
+                if (IsAMCIncluded)
+                {
+                    var results = await query.OrderBy(p => p.MutualFundName)
+                           .Select(p => new
+                           {
+                               //mf = new MFDetailDTO { MutualFundName = p.MutualFundName, MutualFundCode = p.MutualFundCode },
+                               //amc = new AMCDTO { AMCName = p.AMC.AMCName}
+                               mf = new { p.AMC.AMCName, p.MutualFundName, p.MutualFundCode },
+                               TotalCount = query.Count(),
+                           })
+                           .Skip(PageIndex * PageSize).Take(PageSize)
+                           .ToListAsync();
+
+                    var mfScheme = results.Select(a => a.mf).ToList();
+                    var totalCount = results.FirstOrDefault()?.TotalCount ?? await query.CountAsync();
+
+                    vReturn.Result.ActualCount = totalCount;
+                    vReturn.Result.Data = JsonConvert.DeserializeObject<List<object>>(JsonConvert.SerializeObject(mfScheme).ToString());
+                }
+                else
+                {
+                    var results = await query.OrderBy(p => p.MutualFundName)
+                                       .Select(p => new
+                                       {
+                                           mf = new MFDetailDTO { MutualFundName = p.MutualFundName, MutualFundCode = p.MutualFundCode },
+                                           TotalCount = query.Count()
+                                       })
+                                       .Skip(PageIndex * PageSize).Take(PageSize)
+                                       .ToListAsync();
+
+                    var mfScheme = results.Select(p => p.mf).ToList();
+                    var totalCount = results.FirstOrDefault()?.TotalCount ?? await query.CountAsync();
+
+                    vReturn.Result.ActualCount = totalCount;
+                    vReturn.Result.Data = JsonConvert.DeserializeObject<List<object>>(JsonConvert.SerializeObject(mfScheme).ToString());
+                }
+
+                //var mfScheme1 = results.Select(p => p.mf).ToList();
+
+                //var mfScheme = results.Select(p => p.mf).ToList();
+
+
+
+                //var results =await q.OrderBy(p => p.MutualFundName)
+                //                   .Select(p => new
+                //                   {
+                //                       mf = new MFDetailDTO { MutualFundName = p.MutualFundName, MutualFundCode = p.MutualFundCode },
+                //                       TotalCount = q.Count()
+                //                   })
+                //                   .Skip(PageIndex).Take(PageSize)
+                //                   .ToListAsync(); 
+
+
+                //var totalCount = results.FirstOrDefault()?.TotalCount ?? 0;
+                //var mfScheme = results.Select(p => p.mf).ToList();
+
+
+                //vReturn.Result.ActualCount = totalCount;
+                //vReturn.Result.Data = JsonConvert.DeserializeObject<List<object>>(JsonConvert.SerializeObject(mfScheme).ToString());
+
+                //Debug.WriteLine(vReturn.Result.Data.Count());
+                vReturn.Success = true;
+                return vReturn;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<DoubleMFResponse> GetMFSchemeDetailsAsync(int PageIndex = 0, int PageSize = 10, string AMCStartsWith = "")
+        {
+            var vReturn = new DoubleMFResponse() { Success = false, Result = new Result() { ActualCount = -1, Data = new List<object>() } };
+            //query
+            var query = _ctx.mutualFunds.Where(p => p.AMC.AMCName.StartsWith(AMCStartsWith));
+            try
+            {
+                var results = await query.OrderBy(p => p.MutualFundName)
+                   .Select(p => new
+                   {
+                       mf = new { p.AMC.AMCName, p.MutualFundName, p.MutualFundCode },
+                       TotalCount = query.Count(),
+                   })
+                   .Skip(PageIndex * PageSize).Take(PageSize)
+                   .ToListAsync();
+
+                var mfScheme = results.Select(a => a.mf).ToList();
+                var totalCount = results.FirstOrDefault()?.TotalCount ?? await query.CountAsync();
+
+                vReturn.Result.ActualCount = totalCount;
+                vReturn.Result.Data = JsonConvert.DeserializeObject<List<object>>(JsonConvert.SerializeObject(mfScheme).ToString());
+
+                //Debug.WriteLine(vReturn.Result.Data.Count());
+                vReturn.Success = true;
+                return vReturn;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
         public async Task<bool> SaveDownloadedData(List<AMFDataModel> downloaded_data)
         {
             bool vReturn = false;

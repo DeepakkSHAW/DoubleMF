@@ -11,4 +11,11 @@ namespace DoubleMF.Data.Services
             return $"Hello {name}, implementation done correctly";
         }
     }
+    public class Repository : IRepository
+    {
+        public string GetData()
+        {
+            return $"DK Test - {DateTime.Now.ToString()}!";
+        }
+    }
 }

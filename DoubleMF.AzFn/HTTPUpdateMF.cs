@@ -20,20 +20,21 @@ namespace DoubleMF.AzFn
 {
     public class HTTPUpdateMF
     {
-        private readonly IRepository _repository;
+        //private readonly IRepository _repository;
         private readonly Download.AMFiindia _aMFiindia;
         private readonly IAMCData _amcQuary;
         private readonly IMFData _mfQuary;
         private readonly INAVData _navQuary;
 
-        public HTTPUpdateMF(IRepository repository, Download.AMFiindia aMFiindia,
+        public HTTPUpdateMF(
+            //IRepository repository, 
+            Download.AMFiindia aMFiindia,
            IAMCData amcData, IMFData mfData, INAVData navData)
         {
-            _repository = repository;
-            _aMFiindia = aMFiindia;
-            _amcQuary = amcData;
-            _mfQuary = mfData;
-            _navQuary = navData;
+            _aMFiindia = aMFiindia ?? throw new ArgumentNullException(nameof(aMFiindia));
+            _amcQuary = amcData ?? throw new ArgumentNullException(nameof(amcData));
+            _mfQuary = mfData ?? throw new ArgumentNullException(nameof(mfData));
+            _navQuary = navData ?? throw new ArgumentNullException(nameof(navData));
         }
         //DK: Note copy the dll 'e_sqlite3.dll' to folder 'D:\home\site\tools' after deployment
         //Also, it might needed to copy this dll to bin folder 'bin\Debug\netcoreapp3.1\bin\' during development and testing
@@ -57,7 +58,7 @@ namespace DoubleMF.AzFn
             DateTime theDate;
             if (DateTime.TryParse(onDate, out theDate))
             {
-                log.LogWarning($"From Repp {_repository.GetData()}");
+                //log.LogWarning($"From Repp {_repository.GetData()}");
                 try
                 {
                     if (theDate > DateTime.Today) { return new ContentResult() { Content = "Sync on future date is not possible", StatusCode = StatusCodes.Status400BadRequest }; }

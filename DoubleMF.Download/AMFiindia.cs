@@ -38,7 +38,15 @@ namespace DoubleMF.Download
                         if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             _responseBody = await response.Content.ReadAsStringAsync();
-                            vReturn = true;
+                            if (_responseBody.Contains("No data found"))
+                            {
+                                _responseBody = null;
+                                vReturn = false;
+                            }
+                            else
+                            {
+                                vReturn = true;
+                            }
                         }
                         else
                             _responseBody = null;

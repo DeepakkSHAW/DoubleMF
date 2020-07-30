@@ -7,8 +7,9 @@ namespace DoubleMF.Data.Services
 {
     public interface IAMCData
     {
-        Task<AssetManagtComp> GetAMCAsync(int AMCID);
+        Task<IEnumerable<AMCDTO>> GetAllAMCAsync();
         Task<IEnumerable<AssetManagtComp>> GetAMCsAsync();
+        Task<AssetManagtComp> GetAMCAsync(int AMCID);
         Task<bool> SaveDownloadedAMCData(List<AMFDataModel> downloaded_data);
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DoubleMF.Download;
 using DoubleMF.Helper;
 using System.Diagnostics;
+using System.Collections;
 
 namespace DoubleMF.Data.Services
 {
@@ -78,6 +79,29 @@ namespace DoubleMF.Data.Services
                 throw;
             }
             return vReturn;
+        }
+
+        public async Task<IEnumerable<Model.AMCDTO>> GetAllAMCAsync()
+        {
+            try
+            {
+                var amcs = await _ctx.assetManagtComps.OrderBy(o => o).ToListAsync();
+                
+                //var amclist = amcs.Select(e => e.AMCName).OrderBy(o => o).ToList();
+                //List<AMCDTO> s1 = new List<AMCDTO>();
+                //s1.Add(new AMCDTO { AMCName = "abc"});
+                //s1 = amcs.Select(a => new AMCDTO() { AMCName = a.AMCName}).ToList();
+                //Console.WriteLine(s1.Count());
+
+                //*fuzz a list to another list*//
+                return amcs.Select(a => new AMCDTO() { AMCName = a.AMCName }).ToList();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                throw;
+            }
+
         }
     }
 }

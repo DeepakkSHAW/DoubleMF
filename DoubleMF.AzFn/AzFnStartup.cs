@@ -10,23 +10,16 @@ using System;
 
 namespace DoubleMF.AzFn
 {
-    public interface IRepository
-    {
-        string GetData();
-    }
-    public class Repository : IRepository
-    {
-        public string GetData()
-        {
-            return $"DK Test - {DateTime.Now.ToString()}!";
-        }
-    }
+
+
     
     public class AzFnStartup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddScoped<IRepository, Repository>();
+            //*DI testing without EFCore*//
+            //builder.Services.AddScoped<Data.Services.IRepository, Data.Services.Repository>(); 
+
             builder.Services.AddScoped<AMFiindia>();
 
             //Debug.WriteLine(Configuration.GetConnectionString("DoubleMFSqliteDB"));

@@ -18,10 +18,10 @@ namespace DoubleMF.AzFn
         public ScheduledUpdateMF(Download.AMFiindia aMFiindia,
            IAMCData amcData, IMFData mfData, INAVData navData)
         {
-            _aMFiindia = aMFiindia;
-            _amcQuary = amcData;
-            _mfQuary = mfData;
-            _navQuary = navData;
+            _aMFiindia = aMFiindia ?? throw new ArgumentNullException(nameof(aMFiindia));
+            _amcQuary = amcData ?? throw new ArgumentNullException(nameof(amcData));
+            _mfQuary = mfData ?? throw new ArgumentNullException(nameof(mfData));
+            _navQuary = navData ?? throw new ArgumentNullException(nameof(navData));
         }
 
         //[Disable]
